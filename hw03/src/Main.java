@@ -1,5 +1,8 @@
-//Банщикова Анастаися Александровна 28.06.1980 89143646546 m
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.Year;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import static java.lang.Integer.parseInt;
@@ -7,28 +10,31 @@ import static java.lang.Integer.parseInt;
 public class Main {
     public static void main(String[] args) {
         Scanner iScanner = new Scanner(System.in);
+        List<String> family = new ArrayList<>();
+        family.add("Банщикова");
         while (true) {
             System.out.println("Введите данные одной строкой в формате: " +
                     "Фамилия Имя Отчество дата рождения(dd.mm.yyyy) номер телефона пол(f или m):");
             String strIn = iScanner.nextLine();
-//            String[] words = strIn.split(" ");
-//            for (int i = 0; i < words.length; i++) {
-//                System.out.println(words[i]);
-//                if (i == 3){
-//                    String[] numDate = words[3].split("\\.");
-//                    for (int j = 0; j < numDate.length; j++) {
-//                        System.out.println(numDate[j]);
-//                    }
-//                }
-//            }
-//
-//        }
-//    }}
             int indexNum = indexOfNumber(strIn);
             if (indexNum == 1) {
                 try{
                     StringBuilder stringOut= strOut(strIn);
                     System.out.println(stringOut);
+                    String filename = strIn.split(" ")[0];
+                    System.out.println(family);
+
+                    for (String s: family) {
+                        if (s.equals(filename)){
+                            appendFileFamily(filename,stringOut);
+                    } else{
+                            family.add(s);
+                            writerFileFamily(filename,stringOut);
+                        }
+
+
+                    }
+
                 }
                 catch (IllegalArgumentException e){
                     e.printStackTrace();
@@ -44,7 +50,7 @@ public class Main {
     }
     public static int indexOfNumber(String strIn) {
         int countWords = 6;
-        String [] words= strIn. split (" ");
+        String [] words= strIn.split (" ");
         System.out.println(words[0]);
         if (words.length < countWords){
             return -1;
@@ -65,8 +71,6 @@ public class Main {
             case -2:
                 System.out.println("Введенна излишняя информация!");
                 break;
-//            default:
-//                System.out.println("Данные введены корректно!");
         }
     }
 
@@ -74,11 +78,7 @@ public class Main {
         String [] words= strIn. split (" ");
         StringBuilder str = new StringBuilder();
         for (int i = 0; i < 3; i++) {
-            //if (words[i] == "/D") {
                 str.append(words[i]+" ");
-//            } else {
-//                throw new IllegalArgumentException("Неверно введено ФИО");
-//            }
         }
         String[] numData = words[3].split("\\.");
         if ((parseInt(numData[0]) > 0) && (parseInt(numData[0]) < 32) &&
@@ -105,10 +105,21 @@ public class Main {
         }
         return str;
     }
+    static void writerFileFamily(String filename, StringBuilder strOut) {
+
+        try (FileWriter fw = new FileWriter(filename+".txt")){
+            fw.append(strOut+"\n");
+       } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    static void appendFileFamily(String filename,StringBuilder strOut) {
+        try (FileWriter fw = new FileWriter(filename+".txt", true)) {
+            fw.append(strOut+"\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
-
-    private static String WriterFileName(String strOut) {
-        return " ";
     }
 }
